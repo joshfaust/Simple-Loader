@@ -21,7 +21,7 @@ See [This Post](https://sevrosecurity.com/2019/05/25/bypass-windows-defender-wit
     </a>
 
 <a href ="https://sevrosecurity.com">
-	<img src="https://vignette.wikia.nocookie.net/red-rising/images/f/fe/House-mars.png"
+	<img src="https://sevrosecurity.com/wp-content/uploads/2019/09/ss_icon.png"
     	title="SevroSecurity.com" align="left" height=50 length=50 />
     </a>
 
